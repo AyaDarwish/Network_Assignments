@@ -1,0 +1,4 @@
+transmitted message : 11010111110010 
+message is correct
+altered message : 11010011110010 
+message is not correct

@@ -1,0 +1,2 @@
+transmitted message : 10011101100 
+message is correct

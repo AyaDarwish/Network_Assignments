@@ -1,3 +1,9 @@
+#include <iostream>
+#include <fstream>
+#include "string"
+#include <stdlib.h>
+#include <conio.h>
+using namespace std;
 
 
 /*
@@ -25,6 +31,7 @@ string CRC_XOR (string s1,string s2)
 	}
 	return result;
 }
+
 
 string Generator(string message , string generator ,bool verifier = false)
 {
@@ -72,7 +79,6 @@ bool verifier (string message , string generator)
 	return (atoi(remainder.c_str()) == 0);
 }
 
-
 void alter (string& message , int index)
 {
 	if (message[index] == '0')
@@ -83,6 +89,147 @@ void alter (string& message , int index)
 }
 
 
+int main ()
+{
+	ifstream infile("input.txt");
+	ofstream outfile("output.txt");
+	bool correct;
+	int choice , index ;
+	string message , generator , command , transmitted_msg , remainder;
 
+	// reading from file
+	getline (infile,message);
+	getline (infile,generator);	
 
+	// Sequence
+	cout<<"Please select which sequance you want: \n 1 - generator --> verifier \n 2 - generator --> verifier --> alter --> verifier"<<endl;
+	cin>>choice;
 
+	// Invalid input
+	while (choice > 2 || choice < 1)
+	{
+		cout <<"Invalid input!\nPlease select which sequance you want: \n 1 - generator --> verifier \n 2 - generator --> verifier --> alter --> verifier"<<endl;
+		cin>>choice;
+	}
+
+	// in case of seq 1
+	remainder = Generator (message, generator);
+	transmitted_msg = message + remainder;
+
+	outfile<<"transmitted message : "<<transmitted_msg<<endl;
+	cout <<"transmitted message : "<<transmitted_msg<<endl;
+
+	correct = verifier (transmitted_msg ,generator);
+	if(correct)
+	{
+		cout << "message is correct"<<endl;
+		outfile << "message is correct"<<endl;
+	}
+
+	else
+	{
+		cout << "message is not correct"<<endl;
+		outfile << "message is not correct"<<endl;
+	}
+
+	// in case of seq 2
+	if (choice == 2)
+	{
+		cout<<"Enter the index of the bit you want to change "<<endl;
+		cin>>index;
+
+		// Index out of range
+		while (index > transmitted_msg.length()-1)
+		{
+			cout<<"Index out of range!\nEnter the index of the bit you want to change "<<endl;
+			cin>>index;
+		}
+
+		alter (transmitted_msg,index);
+	    cout <<"altered message : "<<transmitted_msg<<endl;
+		outfile <<"altered message : "<<transmitted_msg<<endl;
+		correct = verifier (transmitted_msg ,generator);
+		if(correct)
+		{
+			cout << "message is correct"<<endl;
+			outfile << "message is correct"<<endl;
+	    }
+	    else
+	    {
+			cout << "message is not correct"<<endl;
+			outfile << "message is not correct"<<endl;
+	    }
+
+	}
+
+	/*
+	// Parsing Commands --> this code works if you wanna enter the following commands in cmd
+	// 1- generator <file | verifier 
+	// 2- generator <file | verifier | alter <index> |veriier   // without the angle brackets
+
+	getline(cin,command);
+	int i = 0;
+	while (i<command.length())
+	{
+		string remainder , token;
+		
+		// the position of next |
+		int r = command.find('|',i);
+
+		if (r != -1)
+		{
+			token = command.substr(i,r-i);
+			i = r+1;
+		}
+
+		else
+		{
+			token = command.substr(i,token.length() - i);
+			i = command.length();
+		}
+		
+		token = trim(token);
+		if (token [0] == 'g')
+		{
+			remainder = Generator (message, gen);
+			transmitted_msg = message + remainder;
+			transmitted_msg_out = transmitted_msg;
+			//outfile<<"transmitted message : "<<transmitted_msg<<endl;
+			//cout <<"transmitted message : "<<transmitted_msg<<endl;
+		}
+
+		else if (token[0] == 'v')
+		{
+			bool correct = verifier (transmitted_msg ,gen);
+			if(correct)
+			{
+				correct_msg= "message is correct";
+				//cout << "message is correct"<<endl;
+				//outfile << "message is correct"<<endl;
+
+			}
+
+			else
+			{
+				not_correct = "message is not correct";
+				//cout << "message is not correct"<<endl;
+				//outfile << "message is not correct"<<endl;
+			}
+		}
+
+		else if (token[0] == 'a')
+		{
+			int r = token.find(' ',0);
+			while (token[r] == ' ')
+				r++;
+
+			int index = atoi(token.substr(r,token.length()).c_str());
+			alter (transmitted_msg,index);
+			altered_msg_out = transmitted_msg ;
+			//cout <<"altered message : "<<transmitted_msg<<endl;
+			//outfile <<"altered message : "<<transmitted_msg<<endl;
+		}
+	}*/
+	_getch();
+	return 0;
+}
