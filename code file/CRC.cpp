@@ -98,6 +98,14 @@ int main ()
 	cout << "Please enter the path of the input file \n";
 	getline (cin , file_path);
 	ifstream infile(file_path);
+
+	while (infile.fail()) 
+	{
+		cout <<"Couldn't open the file!\nPlease enter the path of the input file \n";
+		getline (cin , file_path);
+		ifstream infile(file_path);
+	}
+
 	ofstream outfile("output.txt");
 	
 
