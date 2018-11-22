@@ -91,11 +91,15 @@ void alter (string& message , int index)
 
 int main ()
 {
-	ifstream infile("input.txt");
-	ofstream outfile("output.txt");
 	bool correct;
 	int choice , index ;
-	string message , generator , command , transmitted_msg , remainder;
+	string file_path , message , generator , command , transmitted_msg , remainder;
+
+	cout << "Please enter the path of the input file \n";
+	getline (cin , file_path);
+	ifstream infile(file_path);
+	ofstream outfile("output.txt");
+	
 
 	// reading from file
 	getline (infile,message);
